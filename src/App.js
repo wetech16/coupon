@@ -6,16 +6,16 @@ import {
   Route,
 } from "react-router-dom";
 import { Home } from "./pages/Home";
-import { Login } from "./pages/Login";
+import Login from "./pages/Login";
 import { Signup } from "./pages/Signup";
 import { Navbar } from "./components/layout/Navbar";
 //Mui
-import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
+import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
-import { themeObjects } from "./util/theme";
+import { appTheme } from "./util/theme";
 
 function App() {
-  const theme = createMuiTheme(themeObjects);
+  const theme = createMuiTheme(appTheme);
   return (
     <MuiThemeProvider theme={theme}>
       <Router>
