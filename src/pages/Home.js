@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import StampCard from "../components/StampCard";
-export const Home = () => {
+const Home = () => {
   const [stamps, setStamp] = useState([
     {
       id: 1,
@@ -48,3 +48,5 @@ export const Home = () => {
     </Grid>
   );
 };
+
+export default Home;

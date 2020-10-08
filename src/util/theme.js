@@ -49,6 +49,7 @@ export const loginTheme = {
     padding: 0,
   },
   button: {
+    position: "relative",
     width: "100%",
   },
   socialButton: {
@@ -59,6 +60,8 @@ export const loginTheme = {
     },
   },
   cardActionsButton: {
+    display: "flex",
+    flexDirection: "column",
     padding: 0,
     margin: "25px 0",
   },
@@ -66,5 +69,8 @@ export const loginTheme = {
     margin: "15px 0",
     textAlign: "center",
     fontSize: 14,
+  },
+  progress: {
+    position: "absolute",
   },
 };

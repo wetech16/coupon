@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
-
+import { Link } from "react-router-dom";
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -10,7 +10,7 @@ import IconButton from "@material-ui/core/IconButton";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import FormHelperText from "@material-ui/core/FormHelperText";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import Visibility from "@material-ui/icons/Visibility";
@@ -19,7 +19,8 @@ import BrandLogo from "../assets/svg/logo/BrandLogo";
 import GoogleLogo from "../assets/svg/logo/GoogleLogo";
 import FacebookLogo from "../assets/svg/logo/FacebookLogo";
 import { Card, CardContent, CardActions } from "@material-ui/core";
-import { appTheme, loginTheme } from "../util/theme";
+import { loginTheme } from "../util/theme";
+import useLogin from "../hooks/useLogin";
 
 const useStyles = makeStyles(loginTheme);
 const Login = (props) => {
@@ -28,14 +29,21 @@ const Login = (props) => {
     email: "",
     password: "",
     loading: false,
-    errors: {},
+    error: {},
+    showPassword: false,
   });
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
+  const { errors, loginUser } = useLogin(
+    values.email,
+    values.password
+  );
+  const handleChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.history.push("/");
+    setValues({ ...values, loading: true });
+    loginUser(values.email, values.password);
+    setValues({ ...values, error: errors, loading: false });
   };
   return (
     <Grid container className={classes.grid} mx="auto">
@@ -55,14 +63,12 @@ const Login = (props) => {
               <Button
                 variant="outlined"
                 className={classes.socialButton}
-                onClick
               >
                 <GoogleLogo /> Sign in with Google
               </Button>
               <Button
                 variant="outlined"
                 className={classes.socialButton}
-                onClick
               >
                 <FacebookLogo /> Sign in with Facebook
               </Button>
@@ -80,8 +86,6 @@ const Login = (props) => {
                 label="Email Address"
                 variant="outlined"
                 className={classes.textField}
-                // helperText={errors.email}
-                // error={errors.email ? true : false}
                 value={values.email}
                 onChange={handleChange}
                 fullWidth
@@ -95,10 +99,10 @@ const Login = (props) => {
                 <InputLabel htmlFor="password">Password</InputLabel>
                 <OutlinedInput
                   id="password"
+                  name="password"
                   type={values.showPassword ? "text" : "password"}
                   value={values.password}
                   onChange={handleChange}
-                  //   error={errors.password ? true : false}
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
@@ -124,18 +128,15 @@ const Login = (props) => {
                   }
                   labelWidth={70}
                 />
-                {/* <FormHelperText id="outlined-weight-helper-text">
-              {errors.password ? errors.password : ""}{" "}
-            </FormHelperText> */}
               </FormControl>
-              {/* {errors.general && (
-            <Typography
-              variant="body2"
-              className={classes.customeError}
-            >
-              {errors.general}
-            </Typography>
-          )} */}
+              {errors.general && (
+                <Typography
+                  variant="body2"
+                  className={classes.customeError}
+                >
+                  {errors.general}
+                </Typography>
+              )}
             </CardContent>
             <CardActions className={classes.cardActionsButton}>
               <Button
@@ -143,9 +144,21 @@ const Login = (props) => {
                 variant="contained"
                 color="primary"
                 className={classes.button}
+                disabled={values.loading}
               >
-                Create Account
+                Login
+                {values.loading && (
+                  <CircularProgress
+                    className={classes.progress}
+                    size={30}
+                  />
+                )}
               </Button>
+              <br />
+              <small>
+                Don't have an account ? sign up{" "}
+                <Link to="/signup">here</Link>
+              </small>
             </CardActions>
           </form>
         </Card>
@@ -155,8 +168,6 @@ const Login = (props) => {
   );
 };
 
-Login.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
+Login.propTypes = {};
 
 export default Login;

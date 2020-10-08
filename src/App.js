@@ -5,9 +5,9 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
-import { Home } from "./pages/Home";
+import Home from "./pages/Home";
 import Login from "./pages/Login";
-import { Signup } from "./pages/Signup";
+import Signup from "./pages/Signup";
 import { Navbar } from "./components/layout/Navbar";
 //Mui
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";

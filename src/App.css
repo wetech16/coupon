@@ -20,3 +20,45 @@ body {
 .nav-container {
   margin: auto;
 }
+
+.password-strenth-bars {
+  display: none;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 8px;
+
+  span {
+    width: calc(100% / 3 - 2px);
+    height: 5px;
+    border-radius: 5px;
+    background: transparent;
+  }
+
+  &.weak {
+    display: flex;
+
+    span:first-child {
+      background: $red;
+    }
+  }
+
+  &.medium {
+    display: flex;
+
+    span {
+      background: $yellow;
+    }
+
+    span:last-child {
+      background: transparent;
+    }
+  }
+
+  &.strong {
+    display: flex;
+
+    span {
+      background: $green-3;
+    }
+  }
+}
