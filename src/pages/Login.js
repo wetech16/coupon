@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+//React
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { Link } from "react-router-dom";
+//Mui
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -20,30 +22,37 @@ import GoogleLogo from "../assets/svg/logo/GoogleLogo";
 import FacebookLogo from "../assets/svg/logo/FacebookLogo";
 import { Card, CardContent, CardActions } from "@material-ui/core";
 import { loginTheme } from "../util/theme";
-import useLogin from "../hooks/useLogin";
+//Redux
+import { connect } from "react-redux";
+import { loginUser } from "../redux/actions/userActions";
 
 const useStyles = makeStyles(loginTheme);
+
 const Login = (props) => {
   const classes = useStyles();
+  const {
+    loginUser,
+    UI: { loading },
+  } = props;
+
   const [values, setValues] = useState({
     email: "",
     password: "",
-    loading: false,
     error: {},
     showPassword: false,
   });
-  const { errors, loginUser } = useLogin(
-    values.email,
-    values.password
-  );
+
+  useEffect(() => {
+    if (props.UI.errors)
+      setValues({ ...values, error: props.UI.errors });
+  }, [props]);
+
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    setValues({ ...values, loading: true });
-    loginUser(values.email, values.password);
-    setValues({ ...values, error: errors, loading: false });
+    loginUser(values.email, values.password, props.history);
   };
   return (
     <Grid container className={classes.grid} mx="auto">
@@ -129,12 +138,12 @@ const Login = (props) => {
                   labelWidth={70}
                 />
               </FormControl>
-              {errors.general && (
+              {values.error.general && (
                 <Typography
                   variant="body2"
                   className={classes.customeError}
                 >
-                  {errors.general}
+                  {values.error.general}
                 </Typography>
               )}
             </CardContent>
@@ -144,10 +153,10 @@ const Login = (props) => {
                 variant="contained"
                 color="primary"
                 className={classes.button}
-                disabled={values.loading}
+                disabled={loading}
               >
                 Login
-                {values.loading && (
+                {loading && (
                   <CircularProgress
                     className={classes.progress}
                     size={30}
@@ -168,6 +177,21 @@ const Login = (props) => {
   );
 };
 
-Login.propTypes = {};
+Login.propTypes = {
+  loginUser: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  UI: PropTypes.object.isRequired,
+};
 
-export default Login;
+// Pull state from Redux Store To Component
+const mapStateToProps = (state) => ({
+  user: state.user,
+  UI: state.UI,
+});
+
+// Push Actions To Props
+const mapActionsToProps = {
+  loginUser,
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(Login);

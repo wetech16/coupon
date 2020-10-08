@@ -15,6 +15,8 @@ import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import { appTheme } from "./util/theme";
 import AuthRoute from "./util/AuthRoute";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
 let authenticated;
 const token = localStorage.getItem("FBIdToken");
@@ -32,28 +34,30 @@ if (token) {
 const theme = createMuiTheme(appTheme);
 const App = () => {
   return (
-    <MuiThemeProvider theme={theme}>
-      <Router>
-        <Navbar />
-        <div className="container">
-          <Switch>
-            <Route exact path="/" component={Home} />{" "}
-            <AuthRoute
-              exact
-              path="/login"
-              component={Login}
-              authenticated={authenticated}
-            />
-            <AuthRoute
-              exact
-              path="/signup"
-              component={Signup}
-              authenticated={authenticated}
-            />
-          </Switch>
-        </div>
-      </Router>
-    </MuiThemeProvider>
+    <Provider store={store}>
+      <MuiThemeProvider theme={theme}>
+        <Router>
+          <Navbar />
+          <div className="container">
+            <Switch>
+              <Route exact path="/" component={Home} />{" "}
+              <AuthRoute
+                exact
+                path="/login"
+                component={Login}
+                authenticated={authenticated}
+              />
+              <AuthRoute
+                exact
+                path="/signup"
+                component={Signup}
+                authenticated={authenticated}
+              />
+            </Switch>
+          </div>
+        </Router>
+      </MuiThemeProvider>
+    </Provider>
   );
 };
 
