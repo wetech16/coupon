@@ -34,7 +34,7 @@ if (token) {
     window.location.href = "/login";
   } else {
     store.dispatch({ type: SET_AUTHENTICATED });
-    store.dispatch(getAuthenticatedUser(token.split("Bearer ")[1]));
+    store.dispatch(getAuthenticatedUser());
   }
 }
 

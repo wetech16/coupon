@@ -64,6 +64,7 @@ const getUserData = (userhandle, dispatch) => {
 };
 // Get own user details
 export const getAuthenticatedUser = () => (dispatch) => {
+  dispatch({ type: LOADING_USER });
   //get userhandle
   let user, userhandle;
   firebase.auth().onAuthStateChanged(function (user) {
@@ -80,7 +81,7 @@ export const getAuthenticatedUser = () => (dispatch) => {
         .then((data) => {
           userhandle = data.docs[0].data().handle;
           console.log(userhandle);
-          getUserData(userhandle, dispatch);
+          dispatch(getUserData(userhandle, dispatch));
         })
         .catch((err) => {
           dispatch({
@@ -103,7 +104,7 @@ export const loginUser = (email, password, history) => (dispatch) => {
     })
     .then((token) => {
       localStorage.setItem("FBIdToken", `Bear ${token}`);
-      getAuthenticatedUser(token);
+      dispatch(getAuthenticatedUser());
       dispatch({ type: CLEAR_ERRORS });
       history.push("/");
     })
