@@ -5,18 +5,95 @@ import {
   LOADING_USER,
   LOADING_UI,
   SET_UNAUTHENTICATED,
+  SET_USER_TOKEN,
   MARK_NOTIFICATIONS_READ,
   STOP_LOADING_USER,
 } from "../types";
 import { db, firebase } from "../../util/db";
 import validateSignupData from "../../util/validator";
 
-// get user details actions
-export const getUserData = () => (dispatch) => {
-  dispatch({ type: LOADING_USER });
+//getUserData
+const getUserData = (userhandle, dispatch) => {
+  let userData = {};
+  db.doc(`/users/${userhandle}`)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        userData.credentials = doc.data();
+        console.log(userData);
+        return db
+          .collection("likes")
+          .where("userHandle", "==", userhandle)
+          .get();
+      }
+    })
+    .then((data) => {
+      userData.likes = [];
+      data.forEach((doc) => {
+        userData.likes.push(doc.data());
+      });
+      return db
+        .collection("notifications")
+        .where("recipient", "==", userhandle)
+        .orderBy("createdAt", "desc")
+        .limit(10)
+        .get();
+    })
+    .then((data) => {
+      userData.notifications = [];
+      data.forEach((doc) => {
+        userData.notifications.push({
+          recipient: doc.data().recipient,
+          sender: doc.data().sender,
+          createdAt: doc.data().createdAt,
+          screamId: doc.data().screamId,
+          type: doc.data().type,
+          read: doc.data().read,
+          notificationId: doc.id,
+        });
+      });
+    })
+    .then(() => {
+      console.log(userData);
+      dispatch({ type: SET_USER, payload: userData });
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({ type: SET_ERRORS, payload: err });
+    });
+};
+// Get own user details
+export const getAuthenticatedUser = () => (dispatch) => {
+  //get userhandle
+  let user, userhandle;
+  firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+      // User is signed in.
+
+      console.log(user);
+
+      return db
+        .collection("users")
+        .where("userId", "==", user.uid)
+        .limit(1)
+        .get()
+        .then((data) => {
+          userhandle = data.docs[0].data().handle;
+          console.log(userhandle);
+          getUserData(userhandle, dispatch);
+        })
+        .catch((err) => {
+          dispatch({
+            type: SET_ERRORS,
+            payload: { general: err.message },
+          });
+        });
+    }
+  });
 };
 
 export const loginUser = (email, password, history) => (dispatch) => {
+  dispatch({ type: CLEAR_ERRORS });
   dispatch({ type: LOADING_UI });
   firebase
     .auth()
@@ -26,7 +103,7 @@ export const loginUser = (email, password, history) => (dispatch) => {
     })
     .then((token) => {
       localStorage.setItem("FBIdToken", `Bear ${token}`);
-      dispatch(getUserData());
+      getAuthenticatedUser(token);
       dispatch({ type: CLEAR_ERRORS });
       history.push("/");
     })
@@ -41,6 +118,7 @@ export const loginUser = (email, password, history) => (dispatch) => {
 export const signupUser = (email, password, handle, history) => (
   dispatch
 ) => {
+  dispatch({ type: CLEAR_ERRORS });
   dispatch({ type: LOADING_UI });
   const newUser = {
     email: email,
@@ -93,7 +171,7 @@ export const signupUser = (email, password, handle, history) => (
         })
         .then(() => {
           localStorage.setItem("FBIdToken", `Bear ${token}`);
-          dispatch(getUserData());
+          getAuthenticatedUser(token);
           dispatch({ type: CLEAR_ERRORS });
           history.push("/");
         })

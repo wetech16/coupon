@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import StampCard from "../components/StampCard";
+import Profile from "../components/profile/Profile";
 const Home = () => {
   const [stamps, setStamp] = useState([
     {
@@ -43,7 +44,7 @@ const Home = () => {
         {recentStampMarkup}
       </Grid>
       <Grid item sm={4} xs={12}>
-        <p>profile</p>
+        <Profile />
       </Grid>
     </Grid>
   );

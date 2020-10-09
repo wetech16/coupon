@@ -29,7 +29,7 @@ export default function (state = initialState, action) {
     case LOADING_UI:
       return {
         ...state,
-        loading: SVGComponentTransferFunctionElement,
+        loading: true,
       };
 
     case STOP_LOADING_UI:

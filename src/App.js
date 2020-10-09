@@ -20,7 +20,10 @@ import { appTheme } from "./util/theme";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import { SET_AUTHENTICATED } from "./redux/types";
-import { logOutUser, getUserData } from "./redux/actions/userActions";
+import {
+  logOutUser,
+  getAuthenticatedUser,
+} from "./redux/actions/userActions";
 
 const token = localStorage.getItem("FBIdToken");
 if (token) {
@@ -31,7 +34,7 @@ if (token) {
     window.location.href = "/login";
   } else {
     store.dispatch({ type: SET_AUTHENTICATED });
-    store.dispatch(getUserData());
+    store.dispatch(getAuthenticatedUser(token.split("Bearer ")[1]));
   }
 }
 

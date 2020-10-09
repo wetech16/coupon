@@ -44,7 +44,9 @@ const Login = (props) => {
 
   useEffect(() => {
     if (props.UI.errors)
-      setValues({ ...values, error: props.UI.errors });
+      setValues((v) => {
+        return { ...v, error: props.UI.errors };
+      });
   }, [props]);
 
   const handleChange = (e) => {

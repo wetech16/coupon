@@ -8,7 +8,8 @@ import {
   SET_UNAUTHENTICATED,
   MARK_NOTIFICATIONS_READ,
   STOP_LOADING_USER,
-} from "./../types";
+  SET_USER_TOKEN,
+} from "../types";
 
 const initialState = {
   authenticated: false,
@@ -16,6 +17,7 @@ const initialState = {
   credentials: {},
   likes: [],
   notifications: [],
+  token: "",
 };
 
 export default function (state = initialState, action) {
@@ -34,7 +36,11 @@ export default function (state = initialState, action) {
         loading: false,
         ...action.payload,
       };
-
+    case SET_USER_TOKEN:
+      return {
+        ...state,
+        token: action.payload,
+      };
     case LOADING_USER:
       return {
         ...state,
