@@ -5,29 +5,34 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
+import jwtDecode from "jwt-decode";
+import AuthRoute from "./util/AuthRoute";
+//pages
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { Navbar } from "./components/layout/Navbar";
-import jwtDecode from "jwt-decode";
 //Mui
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import { appTheme } from "./util/theme";
-import AuthRoute from "./util/AuthRoute";
+//Redux
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import { SET_AUTHENTICATED } from "./redux/types";
+import { logOutUser, getUserData } from "./redux/actions/userActions";
 
 let authenticated;
 const token = localStorage.getItem("FBIdToken");
 if (token) {
   const decodedToken = jwtDecode(token);
-  console.log(decodedToken);
+  //console.log(decodedToken);
   if (decodedToken.exp * 1000 < Date.now()) {
+    store.dispatch(logOutUser());
     window.location.href = "/login";
-    authenticated = false;
   } else {
-    authenticated = true;
+    store.dispatch({ type: SET_AUTHENTICATED });
+    store.dispatch(getUserData());
   }
 }
 
@@ -41,18 +46,8 @@ const App = () => {
           <div className="container">
             <Switch>
               <Route exact path="/" component={Home} />{" "}
-              <AuthRoute
-                exact
-                path="/login"
-                component={Login}
-                authenticated={authenticated}
-              />
-              <AuthRoute
-                exact
-                path="/signup"
-                component={Signup}
-                authenticated={authenticated}
-              />
+              <AuthRoute exact path="/login" component={Login} />
+              <AuthRoute exact path="/signup" component={Signup} />
             </Switch>
           </div>
         </Router>

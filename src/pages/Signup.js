@@ -24,57 +24,12 @@ import FacebookLogo from "../assets/svg/logo/FacebookLogo";
 import useSignupBtn from "../hooks/useSignupBtn";
 import googleSignin from "../hooks/googleSignin";
 import facebookSignin from "../hooks/facebookSignin";
-import useSignup from "../hooks/useSignup";
 //Redux
 import { connect } from "react-redux";
 import { signupUser } from "../redux/actions/userActions";
+import { loginTheme } from "../util/theme";
 
-const useStyles = makeStyles(() => ({
-  root: {
-    maxWidth: 420,
-    minHeight: "100vh",
-    borderRadius: 0,
-    boxShadow: "none",
-    padding: 32,
-  },
-  pageTitle: {
-    marginTop: 30,
-    marginBottom: 30,
-    textAlign: "center",
-  },
-  textField: {
-    margin: "10px auto 10px auto",
-  },
-  card: {
-    display: "flex",
-    flexDirection: "column",
-    padding: 0,
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    padding: 0,
-  },
-  button: {
-    width: "100%",
-  },
-  socialButton: {
-    width: "100%",
-    marginBottom: "15px",
-    "& svg": {
-      marginRight: 7,
-    },
-  },
-  cardActionsButton: {
-    padding: 0,
-    margin: "25px 0",
-  },
-  optionText: {
-    margin: "15px 0",
-    textAlign: "center",
-    fontSize: 14,
-  },
-}));
+const useStyles = makeStyles(loginTheme);
 
 function Signup(props) {
   const {
