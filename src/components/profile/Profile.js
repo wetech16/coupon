@@ -21,6 +21,7 @@ import LinkIcon from "@material-ui/icons/Link";
 import CalendarToday from "@material-ui/icons/CalendarToday";
 import KeyboardReturn from "@material-ui/icons/KeyboardReturn";
 import { makeStyles } from "@material-ui/core";
+import EditDetails from "./EditDetails";
 
 const useStyles = makeStyles({
   paper: {
@@ -159,6 +160,7 @@ const Profile = (props) => {
           <MyButton tip="Logout" onClick={handleLogout}>
             <KeyboardReturn color="primary" />
           </MyButton>
+          <EditDetails />
         </div>
       </Paper>
     ) : (

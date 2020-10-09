@@ -10,12 +10,15 @@ import {
   STOP_LOADING_USER,
 } from "../types";
 import { db, firebase } from "../../util/db";
-import validateSignupData from "../../util/validator";
+import validateSignupData, {
+  validateUserDetails,
+} from "../../util/validator";
 
+let userHandle;
 //getUserData
-const getUserData = (userhandle, dispatch) => {
+const getUserData = () => (dispatch) => {
   let userData = {};
-  db.doc(`/users/${userhandle}`)
+  db.doc(`/users/${userHandle}`)
     .get()
     .then((doc) => {
       if (doc.exists) {
@@ -23,7 +26,7 @@ const getUserData = (userhandle, dispatch) => {
         console.log(userData);
         return db
           .collection("likes")
-          .where("userHandle", "==", userhandle)
+          .where("userHandle", "==", userHandle)
           .get();
       }
     })
@@ -34,7 +37,7 @@ const getUserData = (userhandle, dispatch) => {
       });
       return db
         .collection("notifications")
-        .where("recipient", "==", userhandle)
+        .where("recipient", "==", userHandle)
         .orderBy("createdAt", "desc")
         .limit(10)
         .get();
@@ -66,22 +69,20 @@ const getUserData = (userhandle, dispatch) => {
 export const getAuthenticatedUser = () => (dispatch) => {
   dispatch({ type: LOADING_USER });
   //get userhandle
-  let user, userhandle;
+
   firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
       // User is signed in.
-
       console.log(user);
-
       return db
         .collection("users")
         .where("userId", "==", user.uid)
         .limit(1)
         .get()
         .then((data) => {
-          userhandle = data.docs[0].data().handle;
-          console.log(userhandle);
-          dispatch(getUserData(userhandle, dispatch));
+          userHandle = data.docs[0].data().handle;
+          console.log(userHandle);
+          dispatch(getUserData());
         })
         .catch((err) => {
           dispatch({
@@ -199,4 +200,32 @@ export const signupUser = (email, password, handle, history) => (
 export const logOutUser = () => (dispatch) => {
   localStorage.removeItem("FBIdToken");
   dispatch({ type: SET_UNAUTHENTICATED });
+};
+
+//edit user details in profile page
+export const editUserDetails = (userDetails) => (dispatch) => {
+  dispatch({ type: CLEAR_ERRORS });
+  const { errors, valid } = validateUserDetails(userDetails);
+  if (valid) {
+    //FB
+    db.doc(`/users/${userHandle}`)
+      .update(userDetails)
+      .then(() => {
+        dispatch(getUserData());
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch({
+          type: SET_ERRORS,
+          payload: err.response.data,
+        });
+      });
+  } else {
+    console.log(userDetails);
+    dispatch({ type: STOP_LOADING_USER });
+    dispatch({
+      type: SET_ERRORS,
+      payload: errors,
+    });
+  }
 };

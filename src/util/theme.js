@@ -15,6 +15,31 @@ export const appTheme = {
   },
 };
 
+export const global__theme = {
+  palette: {
+    primary: {
+      main: "#441e51",
+      contrastText: "#fff",
+    },
+    secondary: {
+      main: "#e4056f",
+      contrastText: "#fff",
+    },
+  },
+  typography: {
+    useNextVariant: true,
+  },
+  invisibleSeparator: {
+    border: "none",
+    margin: 4,
+  },
+  visibleSeparator: {
+    width: "100%",
+    borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
+    marginBottom: 20,
+  },
+};
+
 export const loginTheme = {
   grid: {
     maxWidth: 1200,
