@@ -1,12 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import SpaIcon from "@material-ui/icons/Spa";
 import "./stampCard.css";
+
 const StampCard = ({ shopName, eventName, number }) => {
+  const [cardFlip, setCardflip] = useState(false);
   return (
-    <div className="card ">
-      <div className="card__inner is-flipped">
+    <div
+      className={cardFlip ? "card is_flipped" : "card"}
+      onClick={() => setCardflip(!cardFlip)}
+    >
+      <div
+        className={
+          cardFlip ? "card__inner is-flipped" : "card__inner"
+        }
+      >
         <div className="card__face card__face--front">
-          <h2>Card Front</h2>
+          <div>
+            <img src="pp.jpg" alt="" className="pp" />
+            <h2>{shopName}</h2>
+          </div>
+          <SpaIcon /> x4
         </div>
         <div className="card__face card__face--back">
           <div className="card__content">

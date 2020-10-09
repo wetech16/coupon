@@ -1,15 +1,15 @@
 export const appTheme = {
   palette: {
     primary: {
-      light: "#768fff",
-      main: "#2962ff",
-      dark: "#0039cb",
-      contrastText: "#ffffff",
+      light: "#ff9e40",
+      main: "#ff6d00",
+      dark: "#c43c00",
+      contrastText: "#000000",
     },
     secondary: {
-      light: "#b6e3ff",
-      main: "#82b1ff",
-      dark: "#4d82cb",
+      light: "#ffdd71",
+      main: "#ffab40",
+      dark: "#c77c02",
       contrastText: "#000000",
     },
   },

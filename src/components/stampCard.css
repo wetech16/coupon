@@ -1,4 +1,28 @@
+:root {
+  --primary: #ffce00;
+  --secondary: #fe4880;
+  --dark: #212121;
+  --light: #f3f3f3;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: montserrat, sans-serif;
+  width: 100%;
+  min-height: 100vh;
+}
+
 .card {
+  margin: 100px auto 0;
+  width: 420px;
+  height: 210px;
+  perspective: 1000px;
+}
+.card.is_flipped {
   margin: 100px auto 0;
   width: 400px;
   height: 600px;
@@ -37,7 +61,7 @@
   );
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
 }
 
 .card__face--front h2 {
@@ -79,8 +103,8 @@
 
 .pp {
   display: block;
-  width: 128px;
-  height: 128px;
+  width: 80px;
+  height: 80px;
   margin: 0 auto 30px;
   border-radius: 50%;
   background-color: #fff;
@@ -111,5 +135,4 @@
   color: var(--dark);
   font-size: 18px;
   line-height: 1.4;
-  margin-bottom: 18px;
 }
