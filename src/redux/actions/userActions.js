@@ -5,7 +5,6 @@ import {
   LOADING_USER,
   LOADING_UI,
   SET_UNAUTHENTICATED,
-  SET_USER_TOKEN,
   MARK_NOTIFICATIONS_READ,
   STOP_LOADING_USER,
 } from "../types";
@@ -173,7 +172,7 @@ export const signupUser = (email, password, handle, history) => (
         })
         .then(() => {
           localStorage.setItem("FBIdToken", `Bear ${token}`);
-          getAuthenticatedUser(token);
+          dispatch(getAuthenticatedUser());
           dispatch({ type: CLEAR_ERRORS });
           history.push("/");
         })

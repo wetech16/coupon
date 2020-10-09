@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import clsx from "clsx";
 //Mui
 import { Typography } from "@material-ui/core";
@@ -34,7 +34,7 @@ const useStyles = makeStyles(loginTheme);
 function Signup(props) {
   const {
     signupUser,
-    UI: { loading, errors },
+    UI: { loading },
   } = props;
   const classes = useStyles();
   const [
@@ -47,7 +47,13 @@ function Signup(props) {
     passwordStr,
     showPassword,
     setShowpassword,
+    errors,
+    setErrors,
   ] = useSignupBtn();
+
+  useEffect(() => {
+    if (props.UI.errors) setErrors(props.UI.errors);
+  }, [props]);
 
   return (
     <Card className={classes.root} mx="auto">

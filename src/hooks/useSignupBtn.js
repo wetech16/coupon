@@ -22,6 +22,7 @@ export default function useSignupBtn() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [showPassword, setShowpassword] = useState(false);
+  const [errors, setErrors] = useState("");
   const handleEmail = (e) => setEmail(e.target.value);
   const handlePassword = (e) => {
     setPassword(e.target.value);
@@ -38,5 +39,7 @@ export default function useSignupBtn() {
     passwordStr,
     showPassword,
     setShowpassword,
+    errors,
+    setErrors,
   ];
 }
