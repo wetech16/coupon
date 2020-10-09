@@ -1,9 +1,15 @@
 // Types
-import { SET_ERRORS, CLEAR_ERRORS, LOADING_UI, STOP_LOADING_UI, LOADING_COMMENT_UI } from './../types';
+import {
+  SET_ERRORS,
+  CLEAR_ERRORS,
+  LOADING_UI,
+  STOP_LOADING_UI,
+  LOADING_COMMENT_UI,
+} from "./../types";
 
 const initialState = {
   loading: false,
-  errors: null
+  errors: {},
 };
 
 export default function (state = initialState, action) {
@@ -12,25 +18,25 @@ export default function (state = initialState, action) {
       return {
         ...state,
         loading: false,
-        errors: action.payload
+        errors: action.payload,
       };
     case CLEAR_ERRORS:
       return {
         ...state,
         loading: false,
-        errors: action.payload
+        errors: {},
       };
     case LOADING_UI:
       return {
         ...state,
-        loading: SVGComponentTransferFunctionElement
+        loading: SVGComponentTransferFunctionElement,
       };
 
     case STOP_LOADING_UI:
       return {
         ...state,
-        loading: false
-      }
+        loading: false,
+      };
 
     default:
       return state;

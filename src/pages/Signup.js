@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-
+//Mui
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -16,15 +16,18 @@ import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-
-import useSignupBtn from "../hooks/useSignupBtn";
-import googleSignin from "../hooks/googleSignin";
-import facebookSignin from "../hooks/facebookSignin";
-
+import CircularProgress from "@material-ui/core/CircularProgress";
 import BrandLogo from "../assets/svg/logo/BrandLogo";
 import GoogleLogo from "../assets/svg/logo/GoogleLogo";
 import FacebookLogo from "../assets/svg/logo/FacebookLogo";
+//Hooks
+import useSignupBtn from "../hooks/useSignupBtn";
+import googleSignin from "../hooks/googleSignin";
+import facebookSignin from "../hooks/facebookSignin";
 import useSignup from "../hooks/useSignup";
+//Redux
+import { connect } from "react-redux";
+import { signupUser } from "../redux/actions/userActions";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -73,7 +76,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function Signup() {
+function Signup(props) {
+  const {
+    signupUser,
+    UI: { loading, errors },
+  } = props;
   const classes = useStyles();
   const [
     email,
@@ -87,8 +94,6 @@ function Signup() {
     setShowpassword,
   ] = useSignupBtn();
 
-  const { errr, signupUser } = useSignup(email, password, name);
-
   return (
     <Card className={classes.root} mx="auto">
       <form
@@ -96,7 +101,7 @@ function Signup() {
         className={classes.form}
         onSubmit={(e) => {
           e.preventDefault();
-          signupUser(email, password, name);
+          signupUser(email, password, name, props.history);
         }}
       >
         <CardContent className={classes.card}>
@@ -139,8 +144,8 @@ function Signup() {
               type="text"
               label="First and last name"
               className={classes.textField}
-              helperText={errr.handle}
-              error={errr.handle ? true : false}
+              helperText={errors.handle}
+              error={errors.handle ? true : false}
               value={name}
               variant="outlined"
               onChange={handleName}
@@ -154,8 +159,8 @@ function Signup() {
               label="Email Address"
               variant="outlined"
               className={classes.textField}
-              helperText={errr.email}
-              error={errr.email ? true : false}
+              helperText={errors.email}
+              error={errors.email ? true : false}
               value={email}
               onChange={handleEmail}
               fullWidth
@@ -172,7 +177,7 @@ function Signup() {
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={handlePassword}
-                error={errr.password ? true : false}
+                error={errors.password ? true : false}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -196,7 +201,7 @@ function Signup() {
                 labelWidth={70}
               />
               <FormHelperText id="outlined-weight-helper-text">
-                {errr.password ? errr.password : ""}{" "}
+                {errors.password ? errors.password : ""}{" "}
               </FormHelperText>
               <div className={`password-strenth-bars ${passwordStr}`}>
                 <span></span>
@@ -204,12 +209,12 @@ function Signup() {
                 <span></span>
               </div>
             </FormControl>
-            {errr.general && (
+            {errors.general && (
               <Typography
                 variant="body2"
                 className={classes.customeError}
               >
-                {errr.general}
+                {errors.general}
               </Typography>
             )}
           </div>
@@ -221,8 +226,15 @@ function Signup() {
             variant="contained"
             color="primary"
             className={classes.button}
+            disabled={loading}
           >
             Create Account
+            {loading && (
+              <CircularProgress
+                className={classes.progress}
+                size={30}
+              />
+            )}
           </Button>
         </CardActions>
       </form>
@@ -230,4 +242,15 @@ function Signup() {
   );
 }
 
-export default Signup;
+// Pull state from Redux Store To Component
+const mapStateToProps = (state) => ({
+  user: state.user,
+  UI: state.UI,
+});
+
+// Push Actions To Props
+const mapActionsToProps = {
+  signupUser,
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(Signup);
