@@ -22,7 +22,6 @@ const getUserData = () => (dispatch) => {
     .then((doc) => {
       if (doc.exists) {
         userData.credentials = doc.data();
-        console.log(userData);
         return db
           .collection("likes")
           .where("userHandle", "==", userHandle)
@@ -56,7 +55,6 @@ const getUserData = () => (dispatch) => {
       });
     })
     .then(() => {
-      console.log(userData);
       dispatch({ type: SET_USER, payload: userData });
     })
     .catch((err) => {
@@ -72,7 +70,6 @@ export const getAuthenticatedUser = () => (dispatch) => {
   firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
       // User is signed in.
-      console.log(user);
       return db
         .collection("users")
         .where("userId", "==", user.uid)
@@ -80,7 +77,6 @@ export const getAuthenticatedUser = () => (dispatch) => {
         .get()
         .then((data) => {
           userHandle = data.docs[0].data().handle;
-          console.log(userHandle);
           dispatch(getUserData());
         })
         .catch((err) => {
@@ -220,7 +216,6 @@ export const editUserDetails = (userDetails) => (dispatch) => {
         });
       });
   } else {
-    console.log(userDetails);
     dispatch({ type: STOP_LOADING_USER });
     dispatch({
       type: SET_ERRORS,

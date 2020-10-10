@@ -32,13 +32,11 @@ const LikeButton = (props) => {
   };
 
   const handleLikeScream = () => {
-    console.log(screamId, handle);
-    likeScream(screamId, handle);
+    likeScream(screamId);
   };
 
   const handleUnLikeScream = () => {
-    console.log(screamId, handle);
-    unLikeScream(screamId, handle);
+    unLikeScream(screamId);
   };
 
   const likeButton = !authenticated ? (

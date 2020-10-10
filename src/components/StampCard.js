@@ -14,7 +14,7 @@ import { connect } from "react-redux";
 // MUI stuff
 
 import { makeStyles } from "@material-ui/core";
-import { global__theme } from "../util/theme";
+import { scream__theme } from "../util/theme";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -22,7 +22,7 @@ import Typography from "@material-ui/core/Typography";
 // Icons
 import ChatIcon from "@material-ui/icons/Chat";
 
-const useStyles = makeStyles(global__theme);
+const useStyles = makeStyles(scream__theme);
 
 const StampCard = (props) => {
   const classes = useStyles();
@@ -45,8 +45,13 @@ const StampCard = (props) => {
     number,
     openDialog,
   } = props;
-
   dayjs.extend(relativeTime);
+
+  const deleteButton =
+    authenticated && userHandle === handle ? (
+      <DeleteScream screamId={screamId} />
+    ) : null;
+
   return (
     <Card className={classes.card}>
       <CardContent className={classes.content}>
@@ -60,6 +65,7 @@ const StampCard = (props) => {
         </Typography>
         <Typography variant="body2" color="textSecondary">
           <small color="textSecondary">{`@${userHandle}`}</small>
+          {deleteButton}
         </Typography>
         <Typography variant="body2" color="textSecondary">
           {dayjs(createdAt).fromNow()}

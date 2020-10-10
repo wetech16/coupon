@@ -15,6 +15,22 @@ export const appTheme = {
   },
 };
 
+export const scream__theme = {
+  card: {
+    position: "relative",
+    display: "flex",
+    marginBottom: 20,
+  },
+  image: {
+    minWidth: 200,
+  },
+  content: {
+    padding: 25,
+    objectFit: "cover",
+    width: "100%",
+  },
+};
+
 export const global__theme = {
   palette: {
     primary: {
