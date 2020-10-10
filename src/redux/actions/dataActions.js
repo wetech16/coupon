@@ -20,23 +20,22 @@ import { db, firebase } from "../../util/db";
 
 //getUserHandle
 let myHandle;
-const getUserHandle = (callback) => {
-  firebase.auth().onAuthStateChanged(function (user) {
-    if (user) {
-      // User is signed in.
-      return db
-        .collection("users")
-        .where("userId", "==", user.uid)
-        .limit(1)
-        .get()
-        .then((data) => {
-          callback(data.docs[0].data().handle);
-          console.log(`first ${myHandle}`);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+const getUserHandle = () => {
+  return new Promise((resolve, reject) => {
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        // User is signed in.
+        return db
+          .collection("users")
+          .where("userId", "==", user.uid)
+          .limit(1)
+          .get()
+          .then((data) => {
+            resolve(data.docs[0].data().handle);
+            console.log(`first ${myHandle}`);
+          });
+      }
+    });
   });
 };
 
@@ -74,10 +73,13 @@ export const getScreams = () => (dispatch) => {
 };
 
 // like scream
-export const likeScream = (screamId) => (dispatch) =>
-  getUserHandle((user) => {
+export const likeScream = (screamId) => (dispatch) => {
+  getUserHandle().then((user) => {
     myHandle = user;
-    console.log(`2nd ${myHandle}`);
+    likeScreamProcess(screamId);
+  });
+  console.log(`2nd ${myHandle}`);
+  const likeScreamProcess = (screamId) => {
     const likeDocument = db
       .collection("likes")
       .where("userHandle", "==", myHandle)
@@ -134,12 +136,16 @@ export const likeScream = (screamId) => (dispatch) =>
           payload: { genreral: err.code },
         });
       });
-  });
+  };
+};
 
 // unlike scream
-export const unLikeScream = (screamId) => (dispatch) =>
-  getUserHandle((user) => {
+export const unLikeScream = (screamId) => (dispatch) => {
+  getUserHandle().then((user) => {
     myHandle = user;
+    unLikeScreamProcess(screamId);
+  });
+  const unLikeScreamProcess = (screamId) => {
     const likeDocument = db
       .collection("likes")
       .where("userHandle", "==", myHandle)
@@ -179,7 +185,8 @@ export const unLikeScream = (screamId) => (dispatch) =>
       .catch((err) => {
         console.error(err);
       });
-  });
+  };
+};
 
 export const deleteScream = (screamId) => (dispatch) => {
   dispatch({
