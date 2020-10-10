@@ -18,27 +18,6 @@ import {
 } from "./../types";
 import { db, firebase } from "../../util/db";
 
-//getUserHandle
-let myHandle;
-const getUserHandle = () => {
-  return new Promise((resolve, reject) => {
-    firebase.auth().onAuthStateChanged(function (user) {
-      if (user) {
-        // User is signed in.
-        return db
-          .collection("users")
-          .where("userId", "==", user.uid)
-          .limit(1)
-          .get()
-          .then((data) => {
-            resolve(data.docs[0].data().handle);
-            console.log(`first ${myHandle}`);
-          });
-      }
-    });
-  });
-};
-
 // get all screams
 export const getScreams = () => (dispatch) => {
   dispatch({ type: LOADING_DATA });
@@ -73,119 +52,105 @@ export const getScreams = () => (dispatch) => {
 };
 
 // like scream
-export const likeScream = (screamId) => (dispatch) => {
-  getUserHandle().then((user) => {
-    myHandle = user;
-    likeScreamProcess(screamId);
-  });
-  console.log(`2nd ${myHandle}`);
-  const likeScreamProcess = (screamId) => {
-    const likeDocument = db
-      .collection("likes")
-      .where("userHandle", "==", myHandle)
-      .where("screamId", "==", screamId)
-      .limit(1);
-    const screamDocument = db.doc(`/screams/${screamId}`);
-    let screamData;
-    screamDocument
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          screamData = doc.data();
-          screamData.screamId = doc.id;
-          return likeDocument.get();
-        } else {
-          dispatch({
-            type: SET_ERRORS,
-            payload: { general: "Scream not found" },
-          });
-        }
-      })
-      .then((data) => {
-        if (data.empty) {
-          return db
-            .collection("likes")
-            .add({
-              screamId: screamId,
-              userHandle: myHandle,
-            })
-            .then(() => {
-              screamData.likeCount++;
-              return screamDocument.update({
-                likeCount: screamData.likeCount,
-              });
-            })
-            .then(() => {
-              dispatch({
-                type: LIKE_SCREAM,
-                payload: screamData,
-              });
-              console.log(screamData);
-            });
-        } else {
-          return dispatch({
-            type: SET_ERRORS,
-            payload: { general: "Scream already liked" },
-          });
-        }
-      })
-      .catch((err) => {
-        console.error(err);
+export const likeScream = (screamId, userHandle) => (dispatch) => {
+  const likeDocument = db
+    .collection("likes")
+    .where("userHandle", "==", userHandle)
+    .where("screamId", "==", screamId)
+    .limit(1);
+  const screamDocument = db.doc(`/screams/${screamId}`);
+  let screamData;
+  screamDocument
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        screamData = doc.data();
+        screamData.screamId = doc.id;
+        return likeDocument.get();
+      } else {
         dispatch({
           type: SET_ERRORS,
-          payload: { genreral: err.code },
+          payload: { general: "Scream not found" },
         });
+      }
+    })
+    .then((data) => {
+      if (data.empty) {
+        return db
+          .collection("likes")
+          .add({
+            screamId: screamId,
+            userHandle: userHandle,
+          })
+          .then(() => {
+            screamData.likeCount++;
+            return screamDocument.update({
+              likeCount: screamData.likeCount,
+            });
+          })
+          .then(() => {
+            dispatch({
+              type: LIKE_SCREAM,
+              payload: screamData,
+            });
+          });
+      } else {
+        return dispatch({
+          type: SET_ERRORS,
+          payload: { general: "Scream already liked" },
+        });
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      dispatch({
+        type: SET_ERRORS,
+        payload: { genreral: err.code },
       });
-  };
+    });
 };
 
 // unlike scream
-export const unLikeScream = (screamId) => (dispatch) => {
-  getUserHandle().then((user) => {
-    myHandle = user;
-    unLikeScreamProcess(screamId);
-  });
-  const unLikeScreamProcess = (screamId) => {
-    const likeDocument = db
-      .collection("likes")
-      .where("userHandle", "==", myHandle)
-      .where("screamId", "==", screamId)
-      .limit(1);
-    const screamDocument = db.doc(`/screams/${screamId}`);
-    let screamData;
-    screamDocument
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          screamData = doc.data();
-          screamData.screamId = doc.id;
-          return likeDocument.get();
-        } else {
-          return console.log({ error: "Scream not found" });
-        }
-      })
-      .then((data) => {
-        if (data.empty) {
-          return console.log({ error: "Scream not liked" });
-        } else {
-          return db
-            .doc(`/likes/${data.docs[0].id}`)
-            .delete()
-            .then(() => {
-              screamData.likeCount--;
-              return screamDocument.update({
-                likeCount: screamData.likeCount,
-              });
-            })
-            .then(() => {
-              dispatch({ type: UNLIKE_SCREAM, payload: screamData });
+export const unLikeScream = (screamId, userHandle) => (dispatch) => {
+  const likeDocument = db
+    .collection("likes")
+    .where("userHandle", "==", userHandle)
+    .where("screamId", "==", screamId)
+    .limit(1);
+  const screamDocument = db.doc(`/screams/${screamId}`);
+  let screamData;
+  screamDocument
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        screamData = doc.data();
+        screamData.screamId = doc.id;
+        return likeDocument.get();
+      } else {
+        return console.log({ error: "Scream not found" });
+      }
+    })
+    .then((data) => {
+      if (data.empty) {
+        return console.log({ error: "Scream not liked" });
+      } else {
+        return db
+          .doc(`/likes/${data.docs[0].id}`)
+          .delete()
+          .then(() => {
+            screamData.likeCount--;
+            return screamDocument.update({
+              likeCount: screamData.likeCount,
             });
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
+          })
+          .then(() => {
+            dispatch({ type: UNLIKE_SCREAM, payload: screamData });
+          });
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 };
 
 export const deleteScream = (screamId) => (dispatch) => {

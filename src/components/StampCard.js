@@ -31,7 +31,6 @@ const StampCard = (props) => {
     scream: {
       body,
       createdAt,
-      userImage,
       userHandle,
       screamId,
       likeCount,
@@ -46,19 +45,10 @@ const StampCard = (props) => {
     number,
     openDialog,
   } = props;
-  const deleteButton =
-    authenticated && userHandle === handle ? (
-      <DeleteScream screamId={screamId} />
-    ) : null;
 
   dayjs.extend(relativeTime);
   return (
     <Card className={classes.card}>
-      <CardMedia
-        image={userImage}
-        title="Profile Image"
-        className={classes.image}
-      />
       <CardContent className={classes.content}>
         <Typography
           variant="h5"
@@ -71,7 +61,6 @@ const StampCard = (props) => {
         <Typography variant="body2" color="textSecondary">
           <small color="textSecondary">{`@${userHandle}`}</small>
         </Typography>
-        {deleteButton}
         <Typography variant="body2" color="textSecondary">
           {dayjs(createdAt).fromNow()}
         </Typography>

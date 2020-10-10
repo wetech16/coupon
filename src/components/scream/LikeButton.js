@@ -1,28 +1,45 @@
 // Dependancies
-import React from 'react';
-import MyButton from '../../util/MyButton';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import React from "react";
+import MyButton from "../../util/MyButton";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 // Redux
-import { connect } from 'react-redux';
-import { likeScream, unLikeScream } from '../../redux/actions/dataActions';
+import { connect } from "react-redux";
+import {
+  likeScream,
+  unLikeScream,
+} from "../../redux/actions/dataActions";
 // Icons
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 
 const LikeButton = (props) => {
-
-  const { user: { likes, authenticated }, likeScream, unLikeScream, screamId } = props;
+  const {
+    user: {
+      likes,
+      authenticated,
+      credentials: { handle },
+    },
+    likeScream,
+    unLikeScream,
+    screamId,
+  } = props;
 
   const likedScream = () => {
-    if (likes && likes.find(like => like.screamId === screamId))
+    if (likes && likes.find((like) => like.screamId === screamId))
       return true;
     else return false;
   };
 
-  const handleLikeScream = () => likeScream(screamId);
+  const handleLikeScream = () => {
+    console.log(screamId, handle);
+    likeScream(screamId, handle);
+  };
 
-  const handleUnLikeScream = () => unLikeScream(screamId);
+  const handleUnLikeScream = () => {
+    console.log(screamId, handle);
+    unLikeScream(screamId, handle);
+  };
 
   const likeButton = !authenticated ? (
     <Link to="/login">
@@ -35,30 +52,30 @@ const LikeButton = (props) => {
       <FavoriteIcon color="primary" />
     </MyButton>
   ) : (
-        <MyButton tip="Like" onClick={handleLikeScream}>
-          <FavoriteBorder color="primary" />
-        </MyButton>
-      );
+    <MyButton tip="Like" onClick={handleLikeScream}>
+      <FavoriteBorder color="primary" />
+    </MyButton>
+  );
   return likeButton;
-}
+};
 
 // PropTypes
 LikeButton.propTypes = {
   user: PropTypes.object.isRequired,
   screamId: PropTypes.string.isRequired,
   likeScream: PropTypes.func.isRequired,
-  unLikeScream: PropTypes.func.isRequired
+  unLikeScream: PropTypes.func.isRequired,
 };
 
 // Pull state from Redux Store To Component
 const mapStateToProps = (state) => ({
-  user: state.user
+  user: state.user,
 });
 
 // Push Actions To Props
 const mapActionsToProps = {
   likeScream,
-  unLikeScream
+  unLikeScream,
 };
 
 export default connect(
