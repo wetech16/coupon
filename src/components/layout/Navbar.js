@@ -11,6 +11,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 // Icons
 import HomeIcon from "@material-ui/icons/Home";
+import PostScream from "../scream/PostScream";
 
 const Navbar = ({ authenticated }) => {
   return (
@@ -18,11 +19,7 @@ const Navbar = ({ authenticated }) => {
       <Toolbar className="nav-container">
         {authenticated ? (
           <Fragment>
-            <Link to="/">
-              <MyButton tip="Home">
-                <HomeIcon />
-              </MyButton>
-            </Link>
+            <PostScream />
             <Link to="/">
               <MyButton tip="Home">
                 <HomeIcon />

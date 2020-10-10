@@ -155,3 +155,19 @@ export const scream__skeleton__theme = {
     marginBottom: 10,
   },
 };
+
+export const post__scream__theme = {
+  submitButton: {
+    position: "relative",
+    float: "right",
+    marginTop: 10,
+  },
+  progressSpinner: {
+    position: "absolute",
+  },
+  closeButton: {
+    position: "absolute",
+    left: "91%",
+    top: "6%",
+  },
+};

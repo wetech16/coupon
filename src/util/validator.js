@@ -63,3 +63,13 @@ export const validateUserDetails = (data) => {
     valid: Object.keys(errors).length === 0 ? true : false,
   };
 };
+
+export const validateScreamData = (data) => {
+  let errors = {};
+  // scream
+  if (validator.isEmpty(data)) errors.scream = "Must not be empty";
+  return {
+    errors,
+    valid: Object.keys(errors).length === 0 ? true : false,
+  };
+};

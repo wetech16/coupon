@@ -17,6 +17,7 @@ import {
   LOADING_COMMENT_UI,
 } from "./../types";
 import { db, firebase } from "../../util/db";
+import { validateScreamData } from "../../util/validator";
 
 //getUserHandle
 let userHandle;
@@ -202,4 +203,48 @@ export const deleteScream = (screamId) => (dispatch) => {
       payload: screamId,
     });
   });
+};
+
+// psot a scream
+export const postScream = (scream) => (dispatch) => {
+  console.log(scream);
+  getUserHandle((userHandle) => {
+    const { valid, errors } = validateScreamData(scream);
+    dispatch({ type: LOADING_UI });
+    if (valid) {
+      const newScream = {
+        body: scream,
+        userHandle: userHandle,
+        createdAt: new Date().toISOString(),
+        likeCount: 0,
+        commentCount: 0,
+      };
+      db.collection("screams")
+        .add(newScream)
+        .then((doc) => {
+          const resScream = newScream;
+          resScream.screamId = doc.id;
+          dispatch({
+            type: POST_SCREAM,
+            payload: resScream,
+          });
+          dispatch({ type: CLEAR_ERRORS });
+        })
+        .catch((err) => {
+          dispatch({
+            type: SET_ERRORS,
+            payload: err,
+          });
+        });
+    } else {
+      dispatch({
+        type: SET_ERRORS,
+        payload: errors,
+      });
+    }
+  });
+};
+
+export const clearErrors = () => (dispatch) => {
+  dispatch({ type: CLEAR_ERRORS });
 };

@@ -1,7 +1,7 @@
 // dependancies
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import StampCard from "../components/StampCard";
+import StampCard from "../components/scream/StampCard";
 // Components
 import Profile from "../components/profile/Profile";
 // Redux
