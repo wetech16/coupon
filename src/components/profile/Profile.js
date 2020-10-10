@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import MyButton from "../../util/MyButton";
 import ProfileSkeleton from "./../../util/ProfileSkeleton";
+import EditDetails from "./EditDetails";
 // Redux stuff
 import { connect } from "react-redux";
 import { logOutUser } from "../../redux/actions/userActions";
@@ -21,7 +22,6 @@ import LinkIcon from "@material-ui/icons/Link";
 import CalendarToday from "@material-ui/icons/CalendarToday";
 import KeyboardReturn from "@material-ui/icons/KeyboardReturn";
 import { makeStyles } from "@material-ui/core";
-import EditDetails from "./EditDetails";
 
 const useStyles = makeStyles({
   paper: {

@@ -1,47 +1,55 @@
-import React, { useState } from "react";
-import Grid from "@material-ui/core/Grid";
+// dependancies
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 import StampCard from "../components/StampCard";
+// Components
 import Profile from "../components/profile/Profile";
-const Home = () => {
-  const [stamps, setStamp] = useState([
-    {
-      id: 1,
-      shopName: "T4 Shop",
-      eventName: "July 4 Event",
-      number: 4,
-    },
-    {
-      id: 2,
-      shopname: "Quickly Shop",
-      eventName: "11 11 Event",
-      number: 4,
-    },
-  ]);
+// Redux
+import { connect } from "react-redux";
+import { getScreams } from "../redux/actions/dataActions";
+// MUI stuff
+import Grid from "@material-ui/core/Grid";
+import ScreamSkeleton from "../util/ScreamSkeleton";
 
-  // useEffect(() => {
-  //     return () => {
-  //         firestore.get()
-  //         .then(snap => setState({snap.data}))
-  //         .catch(err => console.log(err))
-  //     }
-  // })
-  let recentStampMarkup = stamps ? (
-    stamps.map((stamp) => (
-      <StampCard
-        key={stamp.id}
-        shopName={stamp.shopName}
-        eventName={stamp.eventName}
-        number={stamp.number}
-      />
+const Home = (props) => {
+  const {
+    getScreams,
+    data: { screams, loading },
+  } = props;
+  // const [stamps, setStamp] = useState([
+  //   {
+  //     id: 1,
+  //     shopName: "T4 Shop",
+  //     eventName: "July 4 Event",
+  //     number: 4,
+  //   },
+  //   {
+  //     id: 2,
+  //     shopname: "Quickly Shop",
+  //     eventName: "11 11 Event",
+  //     number: 4,
+  //   },
+  // ]);
+  // key={stamp.id}
+  // shopName={stamp.shopName}
+  // eventName={stamp.eventName}
+  // number={stamp.number}
+
+  useEffect(() => {
+    getScreams();
+  }, [getScreams]);
+
+  let recentScreamsMarkup = !loading ? (
+    screams.map((scream) => (
+      <StampCard key={scream.screamId} scream={scream} />
     ))
   ) : (
-    <p>loading</p>
+    <ScreamSkeleton />
   );
-
   return (
     <Grid container spacing={2}>
       <Grid item sm={8} xs={12}>
-        {recentStampMarkup}
+        {recentScreamsMarkup}
       </Grid>
       <Grid item sm={4} xs={12}>
         <Profile />
@@ -49,5 +57,20 @@ const Home = () => {
     </Grid>
   );
 };
+// PropTypes static
+Home.propTypes = {
+  getScreams: PropTypes.func.isRequired,
+  data: PropTypes.object.isRequired,
+};
 
-export default Home;
+// Pull state from Redux Store To Component
+const mapStateToProps = (state) => ({
+  data: state.data,
+});
+
+// Push Actions To Props
+const mapActionsToProps = {
+  getScreams,
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(Home);
