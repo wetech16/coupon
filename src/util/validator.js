@@ -73,3 +73,15 @@ export const validateScreamData = (data) => {
     valid: Object.keys(errors).length === 0 ? true : false,
   };
 };
+
+export const validateCommentData = (data) => {
+  let errors = {};
+
+  // comment
+  if (validator.isEmpty(data)) errors.comment = "Must not be empty";
+
+  return {
+    errors,
+    valid: Object.keys(errors).length === 0 ? true : false,
+  };
+};

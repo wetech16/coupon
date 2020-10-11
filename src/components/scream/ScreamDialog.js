@@ -5,6 +5,8 @@ import MyButton from "../../util/MyButton";
 import LikeButton from "./LikeButton";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
+import Comments from "./Comments";
+import CommentForm from "./CommentForm";
 // Redux stuff
 import { connect } from "react-redux";
 import {
@@ -114,6 +116,8 @@ const ScreamDialog = (props) => {
         <span>{commentCount} comments</span>
       </Grid>
       <hr className={classes.visibleSeparator} />
+      <CommentForm screamId={screamId} />
+      <Comments comments={comments} />
     </Grid>
   );
   return (

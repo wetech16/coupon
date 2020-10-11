@@ -197,3 +197,15 @@ export const scream__dialog__theme = {
     marginBottom: 50,
   },
 };
+
+export const comments__theme = {
+  commentImage: {
+    maxWidth: "100%",
+    height: "100px",
+    objectFit: "cover",
+    borderRadius: "50%",
+  },
+  commentData: {
+    marginLeft: 20,
+  },
+};

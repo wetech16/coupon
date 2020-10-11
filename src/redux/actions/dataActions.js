@@ -17,7 +17,10 @@ import {
   LOADING_COMMENT_UI,
 } from "./../types";
 import { db, firebase } from "../../util/db";
-import { validateScreamData } from "../../util/validator";
+import {
+  validateCommentData,
+  validateScreamData,
+} from "../../util/validator";
 
 //getUserHandle
 let userHandle;
@@ -249,7 +252,7 @@ export const clearErrors = () => (dispatch) => {
   dispatch({ type: CLEAR_ERRORS });
 };
 
-// get one scream details
+// get one scream details & get that post's comments
 export const getScreamDialog = (screamId) => (dispatch) => {
   dispatch({ type: LOADING_UI });
   let screamData = {};
@@ -281,4 +284,60 @@ export const getScreamDialog = (screamId) => (dispatch) => {
     .catch((err) => {
       console.log(err.message);
     });
+};
+
+// comment on scream
+export const submitComment = (screamId, commentData) => (
+  dispatch
+) => {
+  const { errors, valid } = validateCommentData(commentData);
+  dispatch(clearErrors());
+  if (!valid) {
+    dispatch({ type: LOADING_COMMENT_UI });
+    dispatch({
+      type: SET_ERRORS,
+      payload: errors,
+    });
+    console.log("not");
+  } else {
+    getUserHandle((userHandle) => {
+      console.log("getUserHandle");
+      const newComment = {
+        body: commentData,
+        createdAt: new Date().toISOString(),
+        screamId: screamId,
+        userHandle: userHandle,
+      };
+      console.log(newComment);
+      db.doc(`/screams/${screamId}`)
+        .get()
+        .then((doc) => {
+          if (!doc.exists) {
+            return console.log({ error: "Scream not found" });
+          }
+          return doc.ref.update({
+            commentCount: doc.data().commentCount + 1,
+          });
+          console.log("updated");
+        })
+        .then(() => {
+          return db.collection("comments").add(newComment);
+        })
+        .then(() => {
+          console.log(newComment);
+          dispatch({
+            type: SUBMIT_COMMENT,
+            payload: newComment,
+          });
+          dispatch(clearErrors());
+        })
+        .catch((err) => {
+          console.log("error");
+          dispatch({
+            type: SET_ERRORS,
+            payload: err.name,
+          });
+        });
+    });
+  }
 };
