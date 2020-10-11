@@ -21,6 +21,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 // Icons
 import ChatIcon from "@material-ui/icons/Chat";
+import ScreamDialog from "./ScreamDialog";
 
 const useStyles = makeStyles(scream__theme);
 
@@ -40,9 +41,6 @@ const StampCard = (props) => {
       authenticated,
       credentials: { handle },
     },
-    shopName,
-    eventName,
-    number,
     openDialog,
   } = props;
   dayjs.extend(relativeTime);
@@ -82,7 +80,6 @@ const StampCard = (props) => {
               className="pp"
               onClick={() => setCardflip(!cardFlip)}
             />
-            <h2>{shopName}</h2>
           </div>
           <SpaIcon /> x4
           {deleteButton}
@@ -92,6 +89,11 @@ const StampCard = (props) => {
             <ChatIcon color="primary" />
           </MyButton>
           <span>{commentCount} comments</span>
+          <ScreamDialog
+            screamId={screamId}
+            userHandle={userHandle}
+            openDialog={openDialog}
+          />
         </div>
         <div className="card__face card__face--back">
           <div className="card__content">
@@ -102,10 +104,8 @@ const StampCard = (props) => {
                 className="pp"
                 onClick={() => setCardflip(!cardFlip)}
               />
-              <h2>{shopName}</h2>
             </div>
             <div className="card__body">
-              <h3>{eventName}</h3>
               <p>
                 Lorem ipsum <strong>dolor</strong> sit amet,
                 consectetur <strong>adipiscing</strong> elit. Sed id

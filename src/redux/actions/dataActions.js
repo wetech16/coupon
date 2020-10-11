@@ -248,3 +248,37 @@ export const postScream = (scream) => (dispatch) => {
 export const clearErrors = () => (dispatch) => {
   dispatch({ type: CLEAR_ERRORS });
 };
+
+// get one scream details
+export const getScreamDialog = (screamId) => (dispatch) => {
+  dispatch({ type: LOADING_UI });
+  let screamData = {};
+  db.doc(`/screams/${screamId}`)
+    .get()
+    .then((doc) => {
+      if (!doc.exists) {
+        console.log({ error: "Scream not found" });
+      }
+      screamData = doc.data();
+      screamData.screamId = doc.id;
+      return db
+        .collection("comments")
+        .orderBy("createdAt", "desc")
+        .where("screamId", "==", screamId)
+        .get();
+    })
+    .then((comments) => {
+      screamData.comments = [];
+      comments.forEach((comment) =>
+        screamData.comments.push(comment.data())
+      );
+      dispatch({
+        type: SET_SCREAM,
+        payload: screamData,
+      });
+      dispatch({ type: STOP_LOADING_UI });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
