@@ -188,7 +188,8 @@ export const scream__dialog__theme = {
   },
   expandButton: {
     position: "absolute",
-    left: "90%",
+    left: "50%",
+    top: "10%",
   },
   spinnerDiv: {
     textAlign: "center",

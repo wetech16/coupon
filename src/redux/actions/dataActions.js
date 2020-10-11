@@ -279,6 +279,6 @@ export const getScreamDialog = (screamId) => (dispatch) => {
       dispatch({ type: STOP_LOADING_UI });
     })
     .catch((err) => {
-      console.log(err);
+      console.log(err.message);
     });
 };

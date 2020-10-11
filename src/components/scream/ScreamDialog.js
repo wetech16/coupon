@@ -45,7 +45,7 @@ const ScreamDialog = (props) => {
       comments,
     },
     UI: { loading },
-    getScream,
+    getScreamDialog,
     clearErrors,
   } = props;
 
