@@ -6,6 +6,7 @@ import {
   LOADING_UI,
   SET_UNAUTHENTICATED,
   MARK_NOTIFICATIONS_READ,
+  SET_THATUSER,
   STOP_LOADING_USER,
 } from "../types";
 import { db, firebase } from "../../util/db";
@@ -14,7 +15,7 @@ import validateSignupData, {
 } from "../../util/validator";
 
 let userHandle;
-//getUserData
+//getUserDatas users, likes, and notification data
 const getUserData = () => (dispatch) => {
   let userData = {};
   db.doc(`/users/${userHandle}`)
@@ -222,4 +223,17 @@ export const editUserDetails = (userDetails) => (dispatch) => {
       payload: errors,
     });
   }
+};
+
+//get Searching UserData
+export const getUser = (userHandle) => (dispatch) => {
+  let userData;
+  db.collection("users")
+    .where("userId", "==", userHandle)
+    .limit(1)
+    .get()
+    .then((data) => {
+      userData = data.docs[0];
+      dispatch({ type: SET_THATUSER, payload: userData });
+    });
 };

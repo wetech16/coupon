@@ -301,14 +301,12 @@ export const submitComment = (screamId, commentData) => (
     console.log("not");
   } else {
     getUserHandle((userHandle) => {
-      console.log("getUserHandle");
       const newComment = {
         body: commentData,
         createdAt: new Date().toISOString(),
         screamId: screamId,
         userHandle: userHandle,
       };
-      console.log(newComment);
       db.doc(`/screams/${screamId}`)
         .get()
         .then((doc) => {
@@ -318,7 +316,6 @@ export const submitComment = (screamId, commentData) => (
           return doc.ref.update({
             commentCount: doc.data().commentCount + 1,
           });
-          console.log("updated");
         })
         .then(() => {
           return db.collection("comments").add(newComment);
@@ -340,4 +337,46 @@ export const submitComment = (screamId, commentData) => (
         });
     });
   }
+};
+
+// get all data about on user
+export const getUserData = (userHandle) => (dispatch) => {
+  dispatch({ type: LOADING_DATA });
+  let userData = {};
+  db.doc(`/users/${userHandle}`)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        userData.user = doc.data();
+        return db
+          .collection("screams")
+          .where("userHandle", "==", userHandle)
+          .orderBy("createdAt", "desc")
+          .get();
+      } else return console.log({ error: "User not found" });
+    })
+    .then((data) => {
+      userData.screams = [];
+      data.forEach((doc) => {
+        userData.screams.push({
+          body: doc.data().body,
+          createdAt: doc.data().createdAt,
+          userHandle: doc.data().userHandle,
+          userImage: doc.data().userImage,
+          likeCount: doc.data().likeCount,
+          commentCount: doc.data().commentCount,
+          screamId: doc.id,
+        });
+      });
+      dispatch({
+        type: SET_SCREAMS,
+        payload: userData.screams,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: SET_SCREAMS,
+        payload: null,
+      });
+    });
 };

@@ -8,6 +8,7 @@ import {
   SET_UNAUTHENTICATED,
   MARK_NOTIFICATIONS_READ,
   STOP_LOADING_USER,
+  SET_THATUSER,
 } from "../types";
 
 const initialState = {
@@ -16,6 +17,7 @@ const initialState = {
   credentials: {},
   likes: [],
   notifications: [],
+  suser: {},
 };
 
 export default function (state = initialState, action) {
@@ -40,7 +42,10 @@ export default function (state = initialState, action) {
         ...state,
         loading: true,
       };
-
+    case SET_THATUSER:
+      return {
+        suser: action.payload,
+      };
     case STOP_LOADING_USER:
       return {
         ...state,

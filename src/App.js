@@ -12,6 +12,8 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Navbar from "./components/layout/Navbar";
+import user from "./pages/user";
+
 //Mui
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
@@ -50,6 +52,7 @@ const App = () => {
               <Route exact path="/" component={Home} />{" "}
               <AuthRoute exact path="/login" component={Login} />
               <AuthRoute exact path="/signup" component={Signup} />
+              <Route exact path="/users/:handle" component={user} />
             </Switch>
           </div>
         </Router>
