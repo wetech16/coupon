@@ -17,7 +17,7 @@ const initialState = {
   credentials: {},
   likes: [],
   notifications: [],
-  suser: {},
+  suser: [],
 };
 
 export default function (state = initialState, action) {

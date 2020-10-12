@@ -31,13 +31,10 @@ const User = (props) => {
     fetchUserDetails(handle);
   }, [getUserData, props.match.params]);
 
-  const fetchUserDetails = async (handle) => {
-    try {
-      getUser(handle);
-      setProfile(suser);
-    } catch (err) {
-      console.log(err);
-    }
+  const fetchUserDetails = (handle) => {
+    getUser(handle);
+    console.log(`suser ${suser}`);
+    setProfile(suser);
   };
 
   const screamsMarkup = loading ? (

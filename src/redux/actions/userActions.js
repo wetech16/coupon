@@ -228,12 +228,14 @@ export const editUserDetails = (userDetails) => (dispatch) => {
 //get Searching UserData
 export const getUser = (userHandle) => (dispatch) => {
   let userData;
-  db.collection("users")
-    .where("userId", "==", userHandle)
-    .limit(1)
+  console.log(`getuser userHandle ${userHandle}`);
+  db.doc(`/users/${userHandle}`)
     .get()
-    .then((data) => {
-      userData = data.docs[0];
-      dispatch({ type: SET_THATUSER, payload: userData });
+    .then((doc) => {
+      if (doc.exists) {
+        userData = doc.data();
+        console.log(`getUser ${userData}`);
+        dispatch({ type: SET_THATUSER, payload: userData });
+      }
     });
 };
