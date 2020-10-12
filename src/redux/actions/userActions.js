@@ -237,3 +237,22 @@ export const getUser = (userHandle) => (dispatch) => {
       }
     });
 };
+
+//mark Notifications as read
+export const markNotificationsRead = (notificationIds) => (
+  dispatch
+) => {
+  let batch = db.batch();
+  notificationIds.forEach((notificationId) => {
+    const notification = db.doc(`/notifications/${notificationId}`);
+    batch.update(notification, { read: true });
+  });
+  batch
+    .commit()
+    .then(() => {
+      dispatch({
+        type: MARK_NOTIFICATIONS_READ,
+      });
+    })
+    .catch((err) => console.log(err));
+};

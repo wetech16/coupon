@@ -3,6 +3,7 @@ import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import MyButton from "../../util/MyButton";
+import Notification from "./Notifications";
 // Redux
 import { connect } from "react-redux";
 // MUI stuff
@@ -25,11 +26,7 @@ const Navbar = ({ authenticated }) => {
                 <HomeIcon />
               </MyButton>
             </Link>
-            <Link to="/">
-              <MyButton tip="Home">
-                <HomeIcon />
-              </MyButton>
-            </Link>
+            <Notification />
           </Fragment>
         ) : (
           <Fragment>
