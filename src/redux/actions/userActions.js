@@ -228,13 +228,11 @@ export const editUserDetails = (userDetails) => (dispatch) => {
 //get Searching UserData
 export const getUser = (userHandle) => (dispatch) => {
   let userData;
-  console.log(`getuser userHandle ${userHandle}`);
   db.doc(`/users/${userHandle}`)
     .get()
     .then((doc) => {
       if (doc.exists) {
         userData = doc.data();
-        console.log(`getUser ${userData}`);
         dispatch({ type: SET_THATUSER, payload: userData });
       }
     });

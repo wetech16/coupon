@@ -20,22 +20,14 @@ const User = (props) => {
     user: { suser },
   } = props;
 
-  const [profile, setProfile] = useState(null);
   const [screamIdParam, setScreamIdParam] = useState(null);
 
   useEffect(() => {
     const { handle, screamId } = props.match.params;
-    console.log(handle, screamId);
     if (screamId) setScreamIdParam(screamId);
     getUserData(handle);
-    fetchUserDetails(handle);
-  }, [getUserData, props.match.params]);
-
-  const fetchUserDetails = (handle) => {
     getUser(handle);
-    console.log(`suser ${suser}`);
-    setProfile(suser);
-  };
+  }, [getUserData, props.match.param]);
 
   const screamsMarkup = loading ? (
     <ScreamSkeleton />
@@ -61,10 +53,10 @@ const User = (props) => {
         {screamsMarkup}
       </Grid>
       <Grid item sm={4} xs={12}>
-        {profile === null ? (
+        {suser === null ? (
           <ProfileSkeleton />
         ) : (
-          <StaticProfile profile={profile} />
+          <StaticProfile profile={suser} />
         )}
       </Grid>
     </Grid>

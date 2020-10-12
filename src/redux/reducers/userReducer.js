@@ -17,7 +17,7 @@ const initialState = {
   credentials: {},
   likes: [],
   notifications: [],
-  suser: [],
+  suser: null,
 };
 
 export default function (state = initialState, action) {
@@ -44,6 +44,7 @@ export default function (state = initialState, action) {
       };
     case SET_THATUSER:
       return {
+        ...state,
         suser: action.payload,
       };
     case STOP_LOADING_USER:
