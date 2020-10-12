@@ -60,13 +60,12 @@ const ScreamDialog = (props) => {
   }, [props.openDialog]);
 
   const handleOpen = () => {
-    let oldPath = window.location.pathname;
-
     const { userHandle, screamId } = props;
+    //open ScreawmDialog change the route to new one. ESC the dialog then the route change back
+    let oldPath = window.location.pathname;
     const newPath = `/users/${userHandle}/scream/${screamId}`;
-
+    //Edge Case
     if (oldPath === newPath) oldPath = `/users/${userHandle}`;
-
     window.history.pushState(null, null, newPath);
     setOpen(true);
     setOldPath(oldPath);

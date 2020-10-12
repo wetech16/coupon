@@ -41,6 +41,7 @@ const User = (props) => {
     screams.map((scream) => {
       if (scream.screamId === screamIdParam)
         return (
+          // openDialog is passed will be true by default
           <Scream key={scream.screamId} scream={scream} openDialog />
         );
       else return <Scream key={scream.screamId} scream={scream} />;

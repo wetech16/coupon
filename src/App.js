@@ -53,6 +53,7 @@ const App = () => {
               <AuthRoute exact path="/login" component={Login} />
               <AuthRoute exact path="/signup" component={Signup} />
               <Route exact path="/users/:handle" component={user} />
+              // Route open like twiiter
               <Route
                 exact
                 path="/users/:handle/scream/:screamId"
