@@ -49,7 +49,6 @@ const StampCard = (props) => {
     authenticated && userHandle === handle ? (
       <DeleteScream screamId={screamId} />
     ) : null;
-
   return (
     <div className={cardFlip ? "card is_flipped" : "card"}>
       <div
@@ -68,7 +67,6 @@ const StampCard = (props) => {
             >
               {userHandle}
             </Typography>
-
             {deleteButton}
             <Typography variant="body2" color="textSecondary">
               {dayjs(createdAt).fromNow()}
@@ -81,7 +79,11 @@ const StampCard = (props) => {
               onClick={() => setCardflip(!cardFlip)}
             />
           </div>
-          <SpaIcon /> x4
+          {Array(5)
+            .fill(1)
+            .map((item) => (
+              <SpaIcon />
+            ))}
           {deleteButton}
           <LikeButton screamId={screamId} />
           <span>{likeCount} Likes</span>
