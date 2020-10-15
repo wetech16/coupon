@@ -16,7 +16,7 @@ import validateSignupData, {
 
 let userHandle;
 //getUserDatas users, likes, and notification data
-const getUserData = () => (dispatch) => {
+const getUserData = (userHandle) => (dispatch) => {
   let userData = {};
   db.doc(`/users/${userHandle}`)
     .get()
