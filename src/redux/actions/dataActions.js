@@ -365,6 +365,7 @@ export const getUserData = (userHandle) => (dispatch) => {
           body: doc.data().body,
           createdAt: doc.data().createdAt,
           userHandle: doc.data().userHandle,
+          userImage: doc.data().userImage,
           likeCount: doc.data().likeCount,
           commentCount: doc.data().commentCount,
           screamId: doc.id,
