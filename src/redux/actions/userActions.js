@@ -78,7 +78,7 @@ export const getAuthenticatedUser = () => (dispatch) => {
         .get()
         .then((data) => {
           userHandle = data.docs[0].data().handle;
-          dispatch(getUserData());
+          dispatch(getUserData(userHandle));
         })
         .catch((err) => {
           dispatch({

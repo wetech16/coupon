@@ -23,7 +23,7 @@ import {
 } from "../../util/validator";
 
 //getUserHandle
-let userHandle;
+let userHandle, imageUrl, reqUser;
 const getUserHandle = (callback) => {
   firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
@@ -34,8 +34,10 @@ const getUserHandle = (callback) => {
         .limit(1)
         .get()
         .then((data) => {
-          userHandle = data.docs[0].data().handle;
-          callback(userHandle);
+          reqUser = {};
+          reqUser.userHandle = data.docs[0].data().handle;
+          reqUser.imageUrl = data.docs[0].data().imageUrl;
+          callback(reqUser);
         });
     }
   });
@@ -76,10 +78,10 @@ export const getScreams = () => (dispatch) => {
 
 // like scream
 export const likeScream = (screamId) => (dispatch) => {
-  getUserHandle((userHandle) => {
+  getUserHandle((reqUser) => {
     const likeDocument = db
       .collection("likes")
-      .where("userHandle", "==", userHandle)
+      .where("userHandle", "==", reqUser.userHandle)
       .where("screamId", "==", screamId)
       .limit(1);
     const screamDocument = db.doc(`/screams/${screamId}`);
@@ -137,10 +139,10 @@ export const likeScream = (screamId) => (dispatch) => {
 
 // unlike scream
 export const unLikeScream = (screamId) => (dispatch) => {
-  getUserHandle((userHandle) => {
+  getUserHandle((reqUser) => {
     const likeDocument = db
       .collection("likes")
-      .where("userHandle", "==", userHandle)
+      .where("userHandle", "==", reqUser.userHandle)
       .where("screamId", "==", screamId)
       .limit(1);
     const screamDocument = db.doc(`/screams/${screamId}`);
@@ -189,7 +191,7 @@ export const deleteScream = (screamId) => (dispatch) => {
         if (!doc.exists) {
           return console.log({ error: "Scream not found" });
         }
-        if (doc.data().userHandle !== userHandle) {
+        if (doc.data().userHandle !== userHandle.userHandle) {
           return console.log({ error: "Unauthorized" });
         } else {
           return document.delete();
@@ -217,10 +219,11 @@ export const postScream = (scream) => (dispatch) => {
     if (valid) {
       const newScream = {
         body: scream,
-        userHandle: userHandle,
+        userHandle: userHandle.userHandle,
         createdAt: new Date().toISOString(),
         likeCount: 0,
         commentCount: 0,
+        userImage: userHandle.imageUrl,
       };
       db.collection("screams")
         .add(newScream)
@@ -305,7 +308,7 @@ export const submitComment = (screamId, commentData) => (
         body: commentData,
         createdAt: new Date().toISOString(),
         screamId: screamId,
-        userHandle: userHandle,
+        userHandle: userHandle.userHandle,
       };
       db.doc(`/screams/${screamId}`)
         .get()

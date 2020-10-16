@@ -44,7 +44,7 @@ export default function (state = initialState, action) {
       };
     case SET_THATUSER:
       return {
-        ...state,
+        loading: false,
         suser: action.payload,
       };
     case STOP_LOADING_USER:

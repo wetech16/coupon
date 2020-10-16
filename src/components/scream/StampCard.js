@@ -36,6 +36,7 @@ const StampCard = (props) => {
       screamId,
       likeCount,
       commentCount,
+      userImage,
     },
     user: {
       authenticated,
@@ -73,7 +74,7 @@ const StampCard = (props) => {
             </Typography>
 
             <img
-              src="pp.jpg"
+              src={userImage}
               alt=""
               className="pp"
               onClick={() => setCardflip(!cardFlip)}
@@ -101,7 +102,7 @@ const StampCard = (props) => {
           <div className="card__content">
             <div className="card__header">
               <img
-                src="pp.jpg"
+                src={userImage}
                 alt=""
                 className="pp"
                 onClick={() => setCardflip(!cardFlip)}
