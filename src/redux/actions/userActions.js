@@ -18,6 +18,8 @@ import validateSignupData, {
 let userHandle;
 //getUserDatas users, likes, and notification data
 const getUserData = (userHandle) => (dispatch) => {
+  dispatch({ type: LOADING_USER });
+  console.log("getUserData");
   let userData = {};
   db.doc(`/users/${userHandle}`)
     .get()
@@ -57,6 +59,7 @@ const getUserData = (userHandle) => (dispatch) => {
       });
     })
     .then(() => {
+      console.log(userData);
       dispatch({ type: SET_USER, payload: userData });
     })
     .catch((err) => {
@@ -165,6 +168,8 @@ export const signupUser = (email, password, handle, history) => (
             email: email,
             createdAt: new Date().toISOString(),
             userId,
+            imageUrl:
+              "https://firebasestorage.googleapis.com/v0/b/coupon-7c1b6.appspot.com/o/_no-user-image.gif?alt=media",
           };
           //create collection with the set Id document
           return db.doc(`/users/${handle}`).set(userCredentials);
@@ -282,7 +287,7 @@ export const uploadImage = (formData, handle) => (dispatch) => {
           .then((url) => {
             db.doc(`/users/${handle}`).update({ imageUrl: url });
           });
-        dispatch(getAuthenticatedUser());
+        dispatch(getUserData(handle));
       },
       (error) => {
         console.log(error);

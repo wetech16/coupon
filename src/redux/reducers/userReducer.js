@@ -17,7 +17,6 @@ const initialState = {
   credentials: {},
   likes: [],
   notifications: [],
-  suser: null,
 };
 
 export default function (state = initialState, action) {
@@ -32,7 +31,6 @@ export default function (state = initialState, action) {
       return initialState;
     case SET_USER:
       return {
-        ...state,
         authenticated: true,
         loading: false,
         ...action.payload,

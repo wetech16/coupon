@@ -98,15 +98,17 @@ const Profile = (props) => {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (props.UI && props.UI.errors) setErrors(props.UI.errors);
+    setErrors(props.UI.errors);
   }, [props]);
 
   const handleImageChange = (e) => {
     const image = e.target.files[0];
-    const formData = new FormData();
-    formData.append("image", image, image.name);
-    uploadImage(formData, handle);
-    console.log("uploadImage");
+    if (image) {
+      const formData = new FormData();
+      formData.append("image", image, image.name);
+      uploadImage(formData, handle);
+      console.log("uploadImage");
+    }
   };
 
   const handleEditPicture = () => {
