@@ -85,3 +85,29 @@ export const validateCommentData = (data) => {
     valid: Object.keys(errors).length === 0 ? true : false,
   };
 };
+
+export const validateProfielImage = (formData) => {
+  let errors = {};
+
+  const imageToUpload = formData.get("image");
+
+  const mime = imageToUpload.name
+    .substring(imageToUpload.name.lastIndexOf(".") + 1)
+    .toLowerCase();
+  const size = Math.round(imageToUpload.size / 1024);
+  const allowedTypes = ["png", "jpeg", "jpg"];
+
+  if (!allowedTypes.includes(mime))
+    errors.image = "Wrong file type submitted";
+  else if (size >= 4096)
+    errors.image =
+      "Image too Big, please select a file less than 4mb";
+  else if (size <= 300)
+    errors.image =
+      "Image too small, please select a file greater than 500 kb";
+
+  return {
+    errors,
+    valid: Object.keys(errors).length === 0 ? true : false,
+  };
+};

@@ -152,7 +152,7 @@ const ScreamDialog = (props) => {
 // PropTypes
 ScreamDialog.propTypes = {
   clearErrors: PropTypes.func.isRequired,
-  getScream: PropTypes.func.isRequired,
+  getScreamDialog: PropTypes.func.isRequired,
   screamId: PropTypes.string.isRequired,
   userHandle: PropTypes.string.isRequired,
   scream: PropTypes.object.isRequired,

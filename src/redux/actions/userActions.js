@@ -9,9 +9,10 @@ import {
   SET_THATUSER,
   STOP_LOADING_USER,
 } from "../types";
-import { db, firebase } from "../../util/db";
+import { db, firebase, storage } from "../../util/db";
 import validateSignupData, {
   validateUserDetails,
+  validateProfielImage,
 } from "../../util/validator";
 
 let userHandle;
@@ -63,6 +64,11 @@ const getUserData = (userHandle) => (dispatch) => {
       dispatch({ type: SET_ERRORS, payload: err });
     });
 };
+// Clear all errors
+export const clearErrors = () => (dispatch) => {
+  dispatch({ type: CLEAR_ERRORS });
+};
+
 // Get own user details
 export const getAuthenticatedUser = () => (dispatch) => {
   dispatch({ type: LOADING_USER });
@@ -207,7 +213,7 @@ export const editUserDetails = (userDetails) => (dispatch) => {
     db.doc(`/users/${userHandle}`)
       .update(userDetails)
       .then(() => {
-        dispatch(getUserData());
+        dispatch(getUserData(userHandle));
       })
       .catch((err) => {
         console.log(err);
@@ -255,4 +261,38 @@ export const markNotificationsRead = (notificationIds) => (
       });
     })
     .catch((err) => console.log(err));
+};
+
+export const uploadImage = (formData, handle) => (dispatch) => {
+  const { valid, errors } = validateProfielImage(formData);
+  const imageToUpload = formData.get("image");
+  dispatch(clearErrors());
+  dispatch({ type: LOADING_USER });
+  if (valid) {
+    const uploadTask = storage
+      .ref(`images/${imageToUpload.name}`)
+      .put(imageToUpload);
+    uploadTask.on(
+      "state_changed",
+      () => {
+        storage
+          .ref("images")
+          .child(imageToUpload.name)
+          .getDownloadURL()
+          .then((url) => {
+            db.doc(`/users/${handle}`).update({ imageUrl: url });
+          });
+        dispatch(getAuthenticatedUser());
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  } else {
+    dispatch({ type: STOP_LOADING_USER });
+    dispatch({
+      type: SET_ERRORS,
+      payload: errors,
+    });
+  }
 };

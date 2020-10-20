@@ -82,8 +82,8 @@ const StampCard = (props) => {
           </div>
           {Array(5)
             .fill(1)
-            .map((item) => (
-              <SpaIcon />
+            .map((item, index) => (
+              <SpaIcon key={index} />
             ))}
           {deleteButton}
           <LikeButton screamId={screamId} />

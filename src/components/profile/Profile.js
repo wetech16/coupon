@@ -8,7 +8,10 @@ import ProfileSkeleton from "./../../util/ProfileSkeleton";
 import EditDetails from "./EditDetails";
 // Redux stuff
 import { connect } from "react-redux";
-import { logOutUser } from "../../redux/actions/userActions";
+import {
+  logOutUser,
+  uploadImage,
+} from "../../redux/actions/userActions";
 
 // MUI stuff
 import Button from "@material-ui/core/Button";
@@ -22,6 +25,7 @@ import LinkIcon from "@material-ui/icons/Link";
 import CalendarToday from "@material-ui/icons/CalendarToday";
 import KeyboardReturn from "@material-ui/icons/KeyboardReturn";
 import { makeStyles } from "@material-ui/core";
+import EditIcon from "@material-ui/icons/Edit";
 
 const useStyles = makeStyles({
   paper: {
@@ -76,6 +80,7 @@ const Profile = (props) => {
   const classes = useStyles();
   const {
     logOutUser,
+    uploadImage,
     user: {
       credentials: {
         handle,
@@ -95,6 +100,19 @@ const Profile = (props) => {
   useEffect(() => {
     if (props.UI && props.UI.errors) setErrors(props.UI.errors);
   }, [props]);
+
+  const handleImageChange = (e) => {
+    const image = e.target.files[0];
+    const formData = new FormData();
+    formData.append("image", image, image.name);
+    uploadImage(formData, handle);
+    console.log("uploadImage");
+  };
+
+  const handleEditPicture = () => {
+    const fileInput = document.getElementById("imageInput");
+    fileInput.click();
+  };
 
   const handleLogout = () => logOutUser();
 
@@ -120,6 +138,19 @@ const Profile = (props) => {
               alt="profile"
               className="profile-image"
             />
+            <input
+              type="file"
+              id="imageInput"
+              hidden="hidden"
+              onChange={handleImageChange}
+            />
+            <MyButton
+              tip="Edit profile picture"
+              onClick={handleEditPicture}
+              btnClassName="button"
+            >
+              <EditIcon color="primary" />
+            </MyButton>
           </div>
           <hr />
           <div className="profile-details">
@@ -195,10 +226,10 @@ const Profile = (props) => {
 
 // PropTypes
 Profile.propTypes = {
-  classes: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
   UI: PropTypes.object.isRequired,
   logOutUser: PropTypes.func.isRequired,
+  uploadImage: PropTypes.func.isRequired,
 };
 
 // Pull state from Redux Store To Component
@@ -210,6 +241,7 @@ const mapStateToProps = (state) => ({
 // Push Actions To Props
 const mapActionsToProps = {
   logOutUser,
+  uploadImage,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(Profile);
