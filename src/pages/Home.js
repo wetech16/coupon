@@ -16,24 +16,6 @@ const Home = (props) => {
     getScreams,
     data: { screams, loading },
   } = props;
-  // const [stamps, setStamp] = useState([
-  //   {
-  //     id: 1,
-  //     shopName: "T4 Shop",
-  //     eventName: "July 4 Event",
-  //     number: 4,
-  //   },
-  //   {
-  //     id: 2,
-  //     shopname: "Quickly Shop",
-  //     eventName: "11 11 Event",
-  //     number: 4,
-  //   },
-  // ]);
-  // key={stamp.id}
-  // shopName={stamp.shopName}
-  // eventName={stamp.eventName}
-  // number={stamp.number}
 
   useEffect(() => {
     getScreams();
