@@ -177,7 +177,7 @@ const Profile = (props) => {
               <Fragment>
                 <LinkIcon color="primary" />
                 <a
-                  href={website}
+                  href={`http://${website}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
