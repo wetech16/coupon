@@ -67,7 +67,7 @@ const PostScream = (props) => {
 
   return (
     <Fragment>
-      <MyButton onClick={handleOpen} tip="Post a Scream!">
+      <MyButton onClick={handleOpen} tip="Post a card!">
         <AddIcon />
       </MyButton>
       <Dialog
@@ -83,13 +83,13 @@ const PostScream = (props) => {
         >
           <CloseIcon />
         </MyButton>
-        <DialogTitle>Post a new scream</DialogTitle>
+        <DialogTitle>Post a new card</DialogTitle>
         <DialogContent>
           <form onSubmit={handleSubmit}>
             <TextField
               name="body"
               type="text"
-              label="SCREAM!!!"
+              label="Enter card detail"
               multiline
               rows="3"
               placeholder="Scream at your fellow apes"
