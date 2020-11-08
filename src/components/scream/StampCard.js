@@ -58,45 +58,56 @@ const StampCard = (props) => {
         }
       >
         <div className="card__face card__face--front">
-          <div>
-            <Typography variant="body1">{body}</Typography>
-            <Typography
-              variant="h5"
-              color="primary"
-              component={Link}
-              to={`users/${userHandle}`}
-            >
-              {userHandle}
-            </Typography>
-            {deleteButton}
-            <Typography variant="body2" color="textSecondary">
-              {dayjs(createdAt).fromNow()}
-            </Typography>
-
+          <div className="top">
             <img
               src={userImage}
               alt=""
               className="pp"
               onClick={() => setCardflip(!cardFlip)}
             />
+            <div>
+              <div className="user">
+                <Typography
+                  variant="h5"
+                  color="primary"
+                  component={Link}
+                  to={`users/${userHandle}`}
+                >
+                  {userHandle}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  className={classes.time}
+                >
+                  {dayjs(createdAt).fromNow()}
+                </Typography>
+              </div>
+              <Typography variant="body1" className={classes.body}>
+                {body}
+              </Typography>
+            </div>
           </div>
-          {Array(5)
-            .fill(1)
-            .map((item, index) => (
-              <SpaIcon key={index} />
-            ))}
-          {deleteButton}
-          <LikeButton screamId={screamId} />
-          <span>{likeCount} Likes</span>
-          <MyButton tip="comments">
-            <ChatIcon color="primary" />
-          </MyButton>
-          <span>{commentCount} comments</span>
-          <ScreamDialog
-            screamId={screamId}
-            userHandle={userHandle}
-            openDialog={openDialog}
-          />
+          <div className="bottom">
+            {Array(5)
+              .fill()
+              .map((item, index) => (
+                <SpaIcon key={index} />
+              ))}
+
+            <LikeButton screamId={screamId} />
+            <span>{likeCount} Likes</span>
+            <MyButton tip="comments">
+              <ChatIcon color="primary" />
+            </MyButton>
+            <span>{commentCount} comments</span>
+            <ScreamDialog
+              screamId={screamId}
+              userHandle={userHandle}
+              openDialog={openDialog}
+            />
+            {deleteButton}
+          </div>
         </div>
         <div className="card__face card__face--back">
           <div className="card__content">

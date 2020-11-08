@@ -16,18 +16,14 @@ export const appTheme = {
 };
 
 export const scream__theme = {
-  card: {
-    position: "relative",
-    display: "flex",
-    marginBottom: 20,
+  time: {
+    minWidth: 100,
+    marginLeft: "12px",
   },
-  image: {
-    minWidth: 200,
-  },
-  content: {
-    padding: 25,
-    objectFit: "cover",
-    width: "100%",
+
+  body: {
+    marginLeft: 12,
+    minWidth: 180,
   },
 };
 

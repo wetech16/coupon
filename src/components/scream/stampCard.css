@@ -59,9 +59,26 @@ body {
     var(--primary),
     var(--secondary)
   );
+}
+
+.top {
+  width: 210px;
+  padding: 12px;
+  height: 170px;
   display: flex;
-  align-items: center;
-  justify-content: space-evenly;
+  justify-items: center;
+}
+.user {
+  display: flex;
+  margin-left: 12px;
+  justify-items: center;
+  justify-content: center;
+}
+
+.bottom {
+  display: flex;
+  justify-items: center;
+  justify-content: center;
 }
 
 .card__face--front h2 {
