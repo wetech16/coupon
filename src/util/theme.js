@@ -16,14 +16,20 @@ export const appTheme = {
 };
 
 export const scream__theme = {
-  time: {
-    minWidth: 100,
-    marginLeft: "12px",
+  card: {
+    position: "relative",
+    display: "flex",
+    flexDirection: "column",
+    marginBottom: 20,
   },
-
-  body: {
-    marginLeft: 12,
-    minWidth: 180,
+  image: {
+    minWidth: 200,
+    height: 180,
+  },
+  content: {
+    padding: 25,
+    objectFit: "cover",
+    width: "100%",
   },
 };
 
@@ -185,7 +191,7 @@ export const scream__dialog__theme = {
   expandButton: {
     position: "absolute",
     left: "50%",
-    top: "10%",
+    top: "80%",
   },
   spinnerDiv: {
     textAlign: "center",

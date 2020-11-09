@@ -51,88 +51,48 @@ const StampCard = (props) => {
       <DeleteScream screamId={screamId} />
     ) : null;
   return (
-    <div className={cardFlip ? "card is_flipped" : "card"}>
-      <div
-        className={
-          cardFlip ? "card__inner is-flipped" : "card__inner"
-        }
-      >
-        <div className="card__face card__face--front">
-          <div className="top">
-            <img
-              src={userImage}
-              alt=""
-              className="pp"
-              onClick={() => setCardflip(!cardFlip)}
-            />
-            <div>
-              <div className="user">
-                <Typography
-                  variant="h5"
-                  color="primary"
-                  component={Link}
-                  to={`users/${userHandle}`}
-                >
-                  {userHandle}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  className={classes.time}
-                >
-                  {dayjs(createdAt).fromNow()}
-                </Typography>
-              </div>
-              <Typography variant="body1" className={classes.body}>
-                {body}
-              </Typography>
-            </div>
-          </div>
-          <div className="bottom">
-            {Array(5)
-              .fill()
-              .map((item, index) => (
-                <SpaIcon key={index} />
-              ))}
-
-            <LikeButton screamId={screamId} />
-            <span>{likeCount} Likes</span>
-            <MyButton tip="comments">
-              <ChatIcon color="primary" />
-            </MyButton>
-            <span>{commentCount} comments</span>
-            <ScreamDialog
-              screamId={screamId}
-              userHandle={userHandle}
-              openDialog={openDialog}
-            />
-            {deleteButton}
-          </div>
-        </div>
-        <div className="card__face card__face--back">
-          <div className="card__content">
-            <div className="card__header">
-              <img
-                src={userImage}
-                alt=""
-                className="pp"
-                onClick={() => setCardflip(!cardFlip)}
-              />
-            </div>
-            <div className="card__body">
-              <p>
-                Lorem ipsum <strong>dolor</strong> sit amet,
-                consectetur <strong>adipiscing</strong> elit. Sed id
-                erat a magna lobortis dictum. Nunc est arcu,{" "}
-                <strong>lacinia</strong> quis sapien placerat,{" "}
-                <strong>laoreet</strong> tincidunt nulla.
-              </p>
-              <SpaIcon /> x4
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Card className={classes.card}>
+      <CardMedia
+        image={userImage}
+        title="Profile Image"
+        className={classes.image}
+        onClick={() => setCardflip(!cardFlip)}
+      />
+      <CardContent className={classes.content}>
+        <Typography
+          variant="h5"
+          color="primary"
+          component={Link}
+          to={`users/${userHandle}`}
+        >
+          {userHandle}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          <small color="textSecondary">{`@${userHandle}`}</small>
+        </Typography>
+        {deleteButton}
+        <Typography variant="body2" color="textSecondary">
+          {dayjs(createdAt).fromNow()}
+        </Typography>
+        <Typography variant="body1">{body}</Typography>
+        {Array(5)
+          .fill()
+          .map((item, index) => (
+            <SpaIcon key={index} />
+          ))}
+        <LikeButton screamId={screamId} />
+        <span>{likeCount} Likes</span>
+        <MyButton tip="comments">
+          <ChatIcon color="primary" />
+        </MyButton>
+        <span>{commentCount} comments</span>
+        <ScreamDialog
+          screamId={screamId}
+          userHandle={userHandle}
+          openDialog={openDialog}
+        />
+      </CardContent>
+    </Card>
   );
 };
 
