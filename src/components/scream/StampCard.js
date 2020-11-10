@@ -70,7 +70,7 @@ const StampCard = (props) => {
         <Typography variant="body2" color="textSecondary">
           <small color="textSecondary">{`@${userHandle}`}</small>
         </Typography>
-        {deleteButton}
+
         <Typography variant="body2" color="textSecondary">
           {dayjs(createdAt).fromNow()}
         </Typography>
@@ -91,6 +91,7 @@ const StampCard = (props) => {
           userHandle={userHandle}
           openDialog={openDialog}
         />
+        {deleteButton}
       </CardContent>
     </Card>
   );
